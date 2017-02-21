@@ -9,7 +9,7 @@ RSpec.describe(FuzzySearchIndex, "#find") do
 
   let(:practices) {
     [
-      heathcote_medical_centre,
+      heathcote_medical_centre
     ]
   }
 
@@ -18,7 +18,7 @@ RSpec.describe(FuzzySearchIndex, "#find") do
       code: "H81070",
       name: "Heathcote Medical Centre",
       location: {
-        address: "Heathcote, Tadworth, Surrey",
+        address: "Heathcote, Autumn Drive, Tadworth, Surrey",
         postcode: "KT20 5TH",
         latitude: "51.294906616210937",
         longitude: "-0.22813686728477478",
@@ -53,7 +53,7 @@ RSpec.describe(FuzzySearchIndex, "#find") do
               ],
             },
             address: {
-              value: "Heathcote, Tadworth, Surrey, KT20 5TH",
+              value: "Heathcote, Autumn Drive, Tadworth, Surrey, KT20 5TH",
               matches: [],
             },
             practitioners: [],
@@ -79,9 +79,9 @@ RSpec.describe(FuzzySearchIndex, "#find") do
               matches: [],
             },
             address: {
-              value: "Heathcote, Tadworth, Surrey, KT20 5TH",
+              value: "Heathcote, Autumn Drive, Tadworth, Surrey, KT20 5TH",
               matches: [
-                [11, 18],
+                [25, 32],
               ],
             },
             practitioners: [],
@@ -109,7 +109,7 @@ RSpec.describe(FuzzySearchIndex, "#find") do
               ],
             },
             address: {
-              value: "Heathcote, Tadworth, Surrey, KT20 5TH",
+              value: "Heathcote, Autumn Drive, Tadworth, Surrey, KT20 5TH",
               matches: [
                 [0, 8],
               ],
@@ -126,14 +126,7 @@ RSpec.describe(FuzzySearchIndex, "#find") do
     end
   end
 
-  context "with one match for practitioner" do
-    let(:heathcote_practitioners) {
-      [
-        "FP Summers",
-        "JQ Autumn",
-      ]
-    }
-
+  context "with a match for both address and practitioner" do
     it "returns one result" do
       expect(index.find("autumn")).to eq(
         [
@@ -144,8 +137,10 @@ RSpec.describe(FuzzySearchIndex, "#find") do
               matches: [],
             },
             address: {
-              value: "Heathcote, Tadworth, Surrey, KT20 5TH",
-              matches: [],
+              value: "Heathcote, Autumn Drive, Tadworth, Surrey, KT20 5TH",
+              matches: [
+                [11, 16],
+              ],
             },
             practitioners: [
               {
@@ -157,8 +152,41 @@ RSpec.describe(FuzzySearchIndex, "#find") do
             ],
             score: {
               name: 0,
-              address: 0,
+              address: 6,
               practitioners: 6,
+            }
+          }
+        ]
+      )
+    end
+  end
+
+  context "with one match for practitioner" do
+    it "returns one result" do
+      expect(index.find("summers")).to eq(
+        [
+          {
+            code: "H81070",
+            name: {
+              value: "Heathcote Medical Centre",
+              matches: [],
+            },
+            address: {
+              value: "Heathcote, Autumn Drive, Tadworth, Surrey, KT20 5TH",
+              matches: [],
+            },
+            practitioners: [
+              {
+                value: "FP Summers",
+                matches: [
+                  [3, 9]
+                ],
+              },
+            ],
+            score: {
+              name: 0,
+              address: 1,
+              practitioners: 7,
             }
           }
         ]

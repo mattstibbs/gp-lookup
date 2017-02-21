@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+
+  gp-lookup-api-travis-test:
+    build:
+      context: .
+      args:
+        RACK_ENV: ${RACK_ENV-test}
+        ALLOWED_ORIGINS: http://localhost:3000
+    command: bundle exec rspec
+    ports:
+      - 9292:9292
+    environment:
+      RACK_ENV: ${RACK_ENV-test}
+      SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN}
+      SPLUNK_HEC_ENDPOINT: ${SPLUNK_HEC_ENDPOINT-https://splunk-collector.cloudapp.net:8088}

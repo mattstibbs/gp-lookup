@@ -63,9 +63,14 @@ class FuzzySearchIndex
       hash[index] = []
     }
 
+    # zip can't start with an empty array
+    results_array = [name_results, address_results, practitioner_results]
+    results_array.sort_by! { |x| x.size }.reverse!
+    array_result1, array_result2, array_result3 = results_array[0], results_array[1], results_array[2]
+
     # interleave results so we can get a stable order from sorting
-    all_results = name_results
-      .zip(address_results, practitioner_results)
+    all_results = array_result1
+      .zip(array_result2, array_result3)
       .flatten(1)
       .compact
 

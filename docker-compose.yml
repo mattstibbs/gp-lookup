@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+
+  gp-lookup-api:
+    build:
+      context: .
+      args:
+        RACK_ENV: development
+        ALLOWED_ORIGINS: http://localhost:3000
+    command: bundle exec rackup
+    ports:
+      - 9292:9292
+    environment:
+      RACK_ENV: ${RACK_ENV-development}
+      SPLUNK_HEC_TOKEN: ${SPLUNK_HEC_TOKEN}
+      SPLUNK_HEC_ENDPOINT: ${SPLUNK_HEC_ENDPOINT-https://splunk-collector.cloudapp.net:8088}
